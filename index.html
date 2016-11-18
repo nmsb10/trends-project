@@ -17,77 +17,99 @@
 	<!-- importing moment -->
 	<script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
 
-	<script type="text/javascript" src="assets/employee.js"></script>
+	<!-- adding the google map api -->
+	<!-- <script src="https://maps.googleapis.com/maps/api/js?callback=myMap"></script> -->
+
+	<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+
+	<script type="text/javascript" src=""></script>
 </head>
 <body>
 
 <div class="container">
 	<br>
-	<!-- Jumbotron -->
-	<div class="jumbotron">
-		<h1 class="text-center">trends<br/> get crackin'</h1>
+	<div class="row">
+		<div class="col-md-3">
+		</div>
+		<div class="col-md-6">
+			<div class="input-group">
+				<input type="text" class="form-control" placeholder="enter a location">
+				<span class="input-group-btn">
+					<button class="btn btn-default" type="button">Go!</button>
+				</span>
+			</div><!-- /input-group -->
+		</div><!-- /.col-md-6 -->
+		<div class="col-md-3">
+		</div>
+	</div>
+	
+	<div class="row" id="map-row">
+		<!-- <div class="col-md-3">
+		</div> -->
+		<div id="map" class="col-md-12">
+		  map goes here
+		</div>
+		<!-- <div class="col-md-3">
+		</div> -->
 	</div>
 
-	<!-- borrowed from our class Employee Tracker exercise...
 	<div class="row">
-
-		<!-- Employee data panel
-		<div class="col-lg-6">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="panel-title">have fun</h3>
-				</div>
-				<div class="table-responsive">
-				  <table class="table">
-					<thead>
-					    <tr>
-					      <th>Employee Name</th>
-					      <th>Role</th>
-					      <th>Start Date</th>
-					      <th>Months Worked</th>
-					      <th>Monthly Rate ($)</th>
-					      <th>Total Billed ($)</th>
-					    </tr>
-					    <tbody id="dataTable">
-					    </tbody>
-					</thead>
-				  </table>
-				</div>
+		<div class="btn-group btn-group-justified" role="group" aria-label="...">
+			<div class="btn-group" role="group">
+				<button type="button" class="btn btn-default">Left</button>
+			</div>
+			<div class="btn-group" role="group">
+				<button type="button" class="btn btn-default">Less Left</button>
+			</div>
+			<div class="btn-group" role="group">
+				<button type="button" class="btn btn-default">Middle</button>
+			</div>
+			<div class="btn-group" role="group">
+				<button type="button" class="btn btn-default">Right</button>
+			</div>
+			<div class="btn-group" role="group">
+				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				Dropdown
+				<span class="caret"></span>
+				</button>
+					<ul class="dropdown-menu">
+						<li><a href="#">Dropdown link</a></li>
+						<li><a href="#">Dropdown link</a></li>
+					</ul>
 			</div>
 		</div>
+	</div>
 
-		<!-- Add Employee Panel
-		<div class="col-lg-6">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="panel-title">Add an employee</h3>
-				</div>
-				<div class="panel-body">
-					<!-- Add an employee Form
-					<form role="form">
-						<div class="form-group">
-							<label for="text">Employee Name:</label>
-							<input type="text" class="form-control" id="nameInput">
-						</div>
-						<div class="form-group">
-							<label for="text">Role:</label>
-							<input type="text" class="form-control" id="roleInput">
-						</div>
-						<div class="form-group">
-							<label for="number">Start Date (DDMMYYYY):</label>
-							<input type="number" class="form-control" id="dateInput">
-						</div>
-						<div class="form-group">
-							<label for="number">Monthly Rate:</label>
-							<input type="number" class="form-control" id="rateInput">
-						</div>
-						<button type="submit" class="btn btn-default" id="addEmployee">Submit</button>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div> -->
+	<footer class="footer">
+	</footer>
 </div>
+
+<style>
+#map{
+	width: 400px;
+	height: 400px;
+	background:black;
+	margin: 0 auto;
+	color: white;
+	text-align: center;
+	border-radius: 3px;
+	border: 2px solid grey;
+}
+
+#map-row{
+	margin: 25px auto;
+}
+</style>
+
+<script>
+function myMap() {
+  var mapCanvas = document.getElementById("map");
+  var mapOptions = {
+    center: new google.maps.LatLng(51.5, -0.2), zoom: 10
+  };
+  var map = new google.maps.Map(mapCanvas, mapOptions);
+}
+</script>
 
 
 
