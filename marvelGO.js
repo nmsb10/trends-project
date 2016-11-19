@@ -8,7 +8,7 @@ var characterName = '';
 
 $(document).ready(function() {
 
-    $("button").on("click", function() {
+    $("#search-button").on("click", function() {
 
 
         characterName = $("#name").val().trim();
@@ -26,7 +26,7 @@ $(document).ready(function() {
         });
 
         return false;
-    })
+    });
 
 
-})
+});

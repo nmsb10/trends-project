@@ -20,12 +20,9 @@
 	<!-- importing local .js file -->
 	<script type="text/javascript" src="marvelGO.js"></script>
 
-	<!-- adding the google map api -->
-	<script src="https://maps.googleapis.com/maps/api/js?callback=myMap"></script>
-
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<script type="text/javascript" src=""></script>
+	<script type="text/javascript" src="marvelGO.js"></script>
 </head>
 <body>
 
@@ -56,7 +53,7 @@
 			<form class="navbar-form">
 				<div class="form-group" style="display:inline;">
 					<div class="input-group">
-						<input type="text" class="form-control" placeholder="enter a location">
+						<input type="text" class="form-control" id="name" placeholder="enter a location or superhero...">
 							<span class="input-group-addon" id="search-button">
 								<span class="glyphicon glyphicon-search">
 								</span>
@@ -71,7 +68,7 @@
 		<!-- <div class="col-md-3">
 		</div> -->
 		<div id="map" class="col-md-12">
-		  map goes here
+		  <!-- map goes here -->
 		</div>
 		<!-- <div class="col-md-3">
 		</div> -->
@@ -127,15 +124,21 @@
 a{
 	color: rgb(255,255,255);
 }
+
+#search-button:hover{
+	background-color:lime;
+}
+
 #map{
-	width: 400px;
+	width: 80%;
 	height: 400px;
-	background:black;
+	/*background:black;*/
+	padding:0px;
 	margin: 0 auto;
 	color: white;
 	text-align: center;
 	border-radius: 3px;
-	border: 2px solid grey;
+	border: 2px solid rgb(100, 100, 100);
 }
 
 #map-row{
@@ -147,13 +150,15 @@ a{
 function myMap() {
   var mapCanvas = document.getElementById("map");
   var mapOptions = {
-    center: new google.maps.LatLng(51.5, -0.2), zoom: 10
+    center: new google.maps.LatLng(51.5, -0.2),
+    zoom: 10
   };
   var map = new google.maps.Map(mapCanvas, mapOptions);
 }
 </script>
 
-
+<!-- adding the google map api -->
+<script src="https://maps.googleapis.com/maps/api/js?callback=myMap"></script>
 
 
 </body>
