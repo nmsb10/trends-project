@@ -17,6 +17,9 @@
 	<!-- importing moment -->
 	<script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
 
+	<!-- importing local .js file -->
+	<script type="text/javascript" src="marvelGO.js"></script>
+
 	<!-- adding the google map api -->
 	<!-- <script src="https://maps.googleapis.com/maps/api/js?callback=myMap"></script> -->
 
@@ -90,6 +93,19 @@
 				</div> <!-- panel-body -->
 			</div> <!-- panel -->
 		</div> <!-- /.col-lg-6 -->
+	</div>
+
+	<div class="row">
+
+		<div class="col-lg-4">
+				
+				<input type="textarea" placeholder="Enter a superhero..." id="name">
+				<button type="submit">Submit!</button>
+
+		</div>
+
+		<div class="col-lg-4" id="characterName"></div>
+		<div class="col-lg-4" id="characterBio"></div>
 	</div>
 
 	<footer class="footer">
