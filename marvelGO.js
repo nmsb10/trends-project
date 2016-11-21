@@ -1,3 +1,14 @@
+function myMap() {
+  var mapCanvas = document.getElementById("map");
+  var mapOptions = {
+    //for london:
+    //center: new google.maps.LatLng(51.5, -0.2),
+    center: new google.maps.LatLng(41.895554, -87.618503),
+    zoom: 15
+  };
+  var map = new google.maps.Map(mapCanvas, mapOptions);
+}
+
 var key = "82df9267e06ec89e40b14eec91deacb4";
 var queryURL = "https://gateway.marvel.com:443/v1/public/characters?";
 var privateKey = "accae6d1b3da682be3974ffddf1adf741480562d";
