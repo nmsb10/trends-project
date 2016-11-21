@@ -9,6 +9,19 @@ var currentPosition = null;
 var currentTime = Date.now();
 var hash = "";
 
+//initialize Firebase
+var config = {
+  apiKey: "AIzaSyAykKIlUMQeEwI9TxQBBleSxIKTFWT9xJo",
+  authDomain: "yourhero-1eca9.firebaseapp.com",
+  databaseURL: "https://yourhero-1eca9.firebaseio.com",
+  storageBucket: "yourhero-1eca9.appspot.com",
+  messagingSenderId: "407983143880"
+};
+firebase.initializeApp(config);
+
+//create a variable to reference the Firebase database
+var database = firebase.database();
+
 $(document).ready(function() {
   initMap();
   $("#search-button").on("click", function() {
