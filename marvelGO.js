@@ -6,10 +6,19 @@ var alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
 var marker = null;
 var map = null;
 var currentPosition = null;
+var isPosition = false;
 
 $(document).ready(function() {
 
     initMap();
+
+    getCurrentLocation();
+
+    if(isPosition){
+
+        generateCharacters();
+    }
+
 
     $("#search-button").on("click", function() {
 
@@ -26,6 +35,9 @@ $(document).ready(function() {
         return false;
     })
 
+/*     $("#map").on('click', marker, function() {
+        marker.info.open(map, marker);
+    });*/
 
 
 
@@ -35,6 +47,9 @@ function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 15
     });
+}
+
+function getCurrentLocation(){
 
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
@@ -46,11 +61,14 @@ function initMap() {
 
             currentPosition = pos;
 
-            generateMarker(pos);
+            marker = new google.maps.Marker({
+                position: pos,
+                map: map,
+            });
 
             map.setCenter(pos);
 
-            generateCharacters();
+            isPosition = true;
 
         }, function() {
             handleLocationError(true, infoWindow, map.getCenter());
@@ -63,6 +81,7 @@ function initMap() {
 
 
 function generateCharacters() {
+
     for (var i = 0; i < alphabet.length; i++) {
 
         var currentTime = Date.now();
@@ -73,21 +92,34 @@ function generateCharacters() {
 
         $.ajax({ url: queryURL, method: 'GET' }).done(function(response) {
 
-            console.log(response.data.results[1].name);
-            generateMarker(randomCoordinates(currentPosition));
+            for (var i = 0; i < response.data.results.length; i++) {
+                
+                var charPosition = randomCoordinates(currentPosition);
 
+                marker = new google.maps.Marker({
+                    position: charPosition,
+                    map: map,
+                    title: response.data.results[i].name
+                 });
+
+                marker.info = new google.maps.InfoWindow({
+                    content: "<p class=title>" + response.data.results[i].name + "</p>"
+                });
+
+            }
+             google.maps.event.addListener(marker, 'click', function() {
+                marker.info.open(map, marker);
+                });
 
         });
+
+
     }
 }
 
-function generateMarker(coordinates) {
+function generateMarker(coordinates, name) {
 
 
-    marker = new google.maps.Marker({
-        position: coordinates,
-        map: map
-    });
 
 }
 
@@ -108,8 +140,8 @@ function randomCoordinates(curPosition) {
 
     return newPosition = {
 
-        lat: curPosition.lat + Math.random() * .02 * posNegOne,
-        lng: curPosition.lng + Math.random() * .02 * posNegTwo
+        lat: curPosition.lat + Math.random() * 20 * posNegOne,
+        lng: curPosition.lng + Math.random() * 40 * posNegTwo
 
     }
 }
