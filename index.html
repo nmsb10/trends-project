@@ -22,7 +22,7 @@
 	<!-- for google maps icons -->
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-	<!-- Google Maps library -->
+	<!-- Google Maps api -->
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQ6oGi8dPJaK2_WByhbe8d9SMI4XPu0Qo">
 	</script>
 
@@ -57,13 +57,13 @@
 	</div>
 	
 	<div class="row" id="map-row">
-		<!-- <div class="col-md-3">
-		</div> -->
-		<div id="map" class="col-md-12">
-		  <!-- map goes here -->
+		<div id="floating-panel">
+			<input onclick="battle();" type=button value="fight">
+			<input onclick="displayHealth();" type=button value="health">
+			<input onclick="deleteMarkers();" type=button value="???">
 		</div>
-		<!-- <div class="col-md-3">
-		</div> -->
+		<div id="map" class="col-md-12">
+		</div>
 	</div>
 
 	<div class="row">
@@ -136,10 +136,34 @@ a{
 #map-row{
 	margin: 50px auto;
 }
+
+#floating-panel {
+    position: absolute;
+    top: 75px;
+    left: 25%;
+    z-index: 5;
+    background-color: #fff;
+    padding: 5px;
+    border: 1px solid #999;
+    text-align: center;
+    font-family: 'Roboto','sans-serif';
+    line-height: 30px;
+    padding-left: 10px;
+}
+
+.battle-div{
+	position: absolute;
+	bottom:0px;
+	width: 50%;
+	height: 125px;
+	z-index:4;
+	background-color: white;
+	border: 1px solid lime;
+}
 </style>
 
 <!-- adding the google map api -->
-<script src="https://maps.googleapis.com/maps/api/js?callback=myMap"></script>
+<!-- <script src="https://maps.googleapis.com/maps/api/js?callback=myMap"></script> -->
 
 <!-- importing local .js files -->
 <script type="text/javascript" src="marvelGO.js"></script>

@@ -8,6 +8,8 @@ var map = null;
 var currentPosition = null;
 var currentTime = Date.now();
 var hash = "";
+//markers array keeps track of the characters generated
+var markers = [];
 
 //initialize Firebase
 var config = {
@@ -47,6 +49,7 @@ function initMap() {
     center: new google.maps.LatLng(41.896573, -87.618767),
     zoom: 15
   });
+  var infoWindow = new google.maps.InfoWindow({map: map});
   //if user accepts to allow app to take their current location
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -67,6 +70,14 @@ function initMap() {
   }
 }
 
+//https://developers.google.com/maps/documentation/javascript/examples/map-geolocation
+// function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+//   infoWindow.setPosition(pos);
+//   infoWindow.setContent(browserHasGeolocation ?
+//     'Error: The Geolocation service failed.' :
+//     'Error: Your browser doesn\'t support geolocation.');
+// }
+
 function generateMarker(coordinates) {
   //define the icon image
   //var markerImage = $("<i class='material-icons' style='font-size:35px; color:red;'>");
@@ -75,11 +86,37 @@ function generateMarker(coordinates) {
   //console.log(markerImage);
   marker = new google.maps.Marker({
     position: coordinates,
-    map: map
+    map: map,
+    //added the drop animation when each marker is created
+    animation: google.maps.Animation.DROP
     //icon needs to be a .png, .jpg, etc file
     //icon: markerImage
   });
+  //initiate battle function when marker is clicked
+  marker.addListener('click', battle);
+  //push the new marker to the markers array
+  markers.push(marker);
 }
+
+
+function battle(){
+  console.log("battle selected");
+  console.log(markers);
+  var battleDiv = $('<div class="battle-div">');
+  battleDiv.attr('data-name', "superhero");
+  $('#map-row').append(battleDiv);
+}
+
+
+//function to show all markers in markers array
+function showMarkers(){
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  }
+}
+
+
+
 
 function generateCharacters() {
   for (var i = 0; i < alphabet.length; i++) {
@@ -122,3 +159,16 @@ function randomCoordinates(curPosition) {
 //in eg the Lake, river, major street...
 function safeCoordinates(lat,long){
 }
+
+//create array to hold all character markers
+//if user clicks on a marker, new div appears with buttons
+//can fight this character
+//if user chooses to fight, use weather app to randomly assign weather high/lows as
+//the fight power.
+//after user defeats the character, new marker appears. when user
+//clicks on this new marker, user health points increase and this marker disappears.
+
+//marker.addListener('click', function(event) {
+  //create new div
+        //   addMarker(event.latLng);
+        // });
