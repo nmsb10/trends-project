@@ -2,7 +2,6 @@ var key = "82df9267e06ec89e40b14eec91deacb4";
 var baseURL = "https://gateway.marvel.com:443/v1/public/";
 var privateKey = "accae6d1b3da682be3974ffddf1adf741480562d";
 var characterName = '';
-var alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
 var marker = null;
 var map = null;
 var currentPosition = null;
@@ -28,32 +27,29 @@ $(document).ready(function() {
 
     initMap();
 
-    /*    getCurrentLocation();*/
+    /*    $("#search-button").on("click", function() {
+            //explain here why you need to use the replace function
+            //is this only for 20 results?
+            characterName = $("#name").val().trim().replace(" ", "%20");
+            //see generateCharacters function for source of currentTime and hash variables
+            currentTime = Date.now();
 
+            queryURL = baseURL + "characters?name=" + characterName + currentTime + key + hash;
 
-/*    $("#search-button").on("click", function() {
-        //explain here why you need to use the replace function
-        //is this only for 20 results?
-        characterName = $("#name").val().trim().replace(" ", "%20");
-        //see generateCharacters function for source of currentTime and hash variables
-        currentTime = Date.now();
+            console.log(queryURL);
 
-        queryURL = baseURL + "characters?name=" + characterName + currentTime + key + hash;
+            $.ajax({ url: queryURL, method: 'GET' }).done(function(response) {
 
-        console.log(queryURL);
+                console.log(response.data.results[0].description);
 
-        $.ajax({ url: queryURL, method: 'GET' }).done(function(response) {
+            });
 
-            console.log(response.data.results[0].description);
+            return false;
+        })
 
-        });
+    */
 
-        return false;
-    })
-
-*/
 })
-
 
 function initMap() {
     //default map center defined as Wieboldt Hall 339 E chicago: 41.896573, -87.618767
@@ -62,11 +58,6 @@ function initMap() {
         zoom: 15
     });
 
-    var event = google.maps.event.addListener(marker, 'click', function() {
-        marker.info.open(map, marker);
-    });
-
-    var infoWindow = new google.maps.InfoWindow({ map: map });
     //if user accepts to allow app to take their current location
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
@@ -79,43 +70,13 @@ function initMap() {
             //currentPosition variable used in generateCharacters function
             currentPosition = pos;
             generateCharacters();
+
         }, function() {
             handleLocationError(true, infoWindow, map.getCenter());
         });
     }
 
 }
-
-function getCurrentLocation() {
-
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-
-            var pos = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            };
-
-            currentPosition = pos;
-
-            marker = new google.maps.Marker({
-                position: pos,
-                map: map,
-            });
-
-            map.setCenter(pos);
-
-            isPosition = true;
-
-        }, function() {
-            handleLocationError(true, infoWindow, map.getCenter());
-        });
-    } else {
-        // Browser doesn't support Geolocation
-        handleLocationError(false, infoWindow, map.getCenter());
-    }
-}
-
 //https://developers.google.com/maps/documentation/javascript/examples/map-geolocation
 // function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 //   infoWindow.setPosition(pos);
@@ -124,13 +85,13 @@ function getCurrentLocation() {
 //     'Error: Your browser doesn\'t support geolocation.');
 // }
 
-function generateMarker(coordinates) {
+function generateMarker(coordinates, content) {
     //define the icon image
     //var markerImage = $("<i class='material-icons' style='font-size:35px; color:red;'>");
     //choose which google material icon you want to use
     //markerImage.text("local_pizza");
     //console.log(markerImage);
-    marker = new google.maps.Marker({
+    var marker = new google.maps.Marker({
         position: coordinates,
         map: map,
         //added the drop animation when each marker is created
@@ -139,122 +100,102 @@ function generateMarker(coordinates) {
             //icon: markerImage
     });
     //initiate battle function when marker is clicked
-    marker.addListener('click', battle);
+    /*    marker.addListener('click', battle);*/
     //push the new marker to the markers array
-    markers.push(marker);
+    /*  markers.push(marker);*/
+
+    if (content != null) {
+
+        marker.title = content;
+
+        var infowindow = new google.maps.InfoWindow({
+            content: "<p class=title>" + content + "</p>",
+            position: coordinates
+        });
+
+        marker.addListener('click', function() {
+            infowindow.open(map, marker);
+
+            setInterval(function() { infowindow.close(); }, 3000);
+        });
+    }
 }
 
 function generateCharacters() {
 
-    for (var i = 0; i < alphabet.length; i++) {
+    var currentTime = Date.now();
 
-        var currentTime = Date.now();
+    var hash = "&hash=" + md5(currentTime + privateKey + key);
 
-        var hash = "&hash=" + md5(currentTime + privateKey + key);
+    queryURL = baseURL + "characters?modifiedSince=1/1/1900&ts=" + currentTime + "&apikey=" + key + hash;
 
-        queryURL = baseURL + "characters?nameStartsWith=" + alphabet[i] + "&ts=" + currentTime + "&apikey=" + key + hash;
-        console.log(queryURL);
-        $.ajax({ url: queryURL, method: 'GET' }).done(function(response) {
+    $.ajax({ url: queryURL, method: 'GET' }).done(function(response) {
 
-            for (var i = 0; i < response.data.results.length; i++) {
+        for (var i = 0; i < response.data.results.length; i++) {
 
-                var charPosition = randomCoordinates(currentPosition);
+            generateMarker(randomCoordinates(currentPosition), response.data.results[i].name);
 
-                marker = new google.maps.Marker({
-                    position: charPosition,
-                    map: map,
-                    title: response.data.results[i].name
-                });
+        }
 
-                var infowindow = new google.maps.InfoWindow({
-                    content: "<p class=title>" + response.data.results[i].name + "</p>"
-                });
+    })
 
-/*                google.maps.event.addListener(marker, 'click', function(marker) {
-
-                    return function() {
-
-                        infowindow.setContent(locations[i][0]);
-                        infowindow.open(map, marker);
-                    }
-
-
-                })*/
-            }
-        })
-    }
 }
-    function battle() {
-        console.log("battle selected");
-        console.log(markers);
-        var battleDiv = $('<div class="battle-div">');
-        battleDiv.attr('data-name', "superhero");
-        $('#map-row').append(battleDiv);
+
+function battle() {
+    console.log("battle selected");
+    console.log(markers);
+    var battleDiv = $('<div class="battle-div">');
+    battleDiv.attr('data-name', "superhero");
+    $('#map-row').append(battleDiv);
+}
+
+//function to show all markers in markers array
+/*function showMarkers() {
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
+    }
+}*/
+
+function randomCoordinates(curPosition) {
+    var posNegOne = null;
+    var posNegTwo = null;
+
+    if (Math.random() >= 0.5) {
+        posNegOne = 1;
+    } else {
+        posNegOne = -1;
     }
 
-
-
-    //function to show all markers in markers array
-    function showMarkers() {
-        for (var i = 0; i < markers.length; i++) {
-            markers[i].setMap(map);
-        }
+    if (Math.random() >= 0.5) {
+        posNegTwo = 1;
+    } else {
+        posNegTwo = -1;
     }
 
+    var newPosition = {
+        lat: curPosition.lat + Math.random() * .2 * posNegOne,
+        lng: curPosition.lng + Math.random() * .2 * posNegTwo
+    };
 
-    /*function generateCharacters() {
-        for (var i = 0; i < alphabet.length; i++) {
-            currentTime = Date.now();
-            hash = "&hash=" + md5(currentTime + privateKey + key);
-            queryURL = baseURL + "characters?nameStartsWith=" + alphabet[i] + "&ts=" + currentTime + "&apikey=" + key + hash;
-
-            $.ajax({ url: queryURL, method: 'GET' }).done(function(response) {
-                console.log(response.data.results[1].name);
-                generateMarker(randomCoordinates(currentPosition));
-            });
-        }
-    }*/
-
-    function randomCoordinates(curPosition) {
-        var posNegOne = null;
-        var posNegTwo = null;
-
-        if (Math.random() >= 0.5) {
-            posNegOne = 1;
-        } else {
-            posNegOne = -1;
-        }
-
-        if (Math.random() >= 0.5) {
-            posNegTwo = 1;
-        } else {
-            posNegTwo = -1;
-        }
-
-        var newPosition = {
-            lat: curPosition.lat + Math.random() * 20 * posNegOne,
-            lng: curPosition.lng + Math.random() * 40 * posNegTwo
-        };
-
-        return newPosition;
-    }
+    return newPosition;
+}
 
 
-    //use this function to make sure characters are not given coordinates
-    //in eg the Lake, river, major street...
-    /*function safeCoordinates(lat, long) {
+//use this function to make sure characters are not given coordinates
+//in eg the Lake, river, major street...
+/*function safeCoordinates(lat, long) {
 
-    }*/
+}*/
 
-    //create array to hold all character markers
-    //if user clicks on a marker, new div appears with buttons
-    //can fight this character
-    //if user chooses to fight, use weather app to randomly assign weather high/lows as
-    //the fight power.
-    //after user defeats the character, new marker appears. when user
-    //clicks on this new marker, user health points increase and this marker disappears.
+//create array to hold all character markers
+//if user clicks on a marker, new div appears with buttons
+//can fight this character
+//if user chooses to fight, use weather app to randomly assign weather high/lows as
+//the fight power.
+//after user defeats the character, new marker appears. when user
+//clicks on this new marker, user health points increase and this marker disappears.
 
-    //marker.addListener('click', function(event) {
-    //create new div
-    //   addMarker(event.latLng);
-    // });
+//marker.addListener('click', function(event) {
+//create new div
+//   addMarker(event.latLng);
+// });
