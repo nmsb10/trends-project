@@ -1,0 +1,20 @@
+p  { color: #ffffff; 
+	 font-family:'Bungee Inline';
+	 text-align: center; 
+	 font-size: 8em; 
+}
+
+body { background-size: cover;
+	   text-align: center; 
+}
+
+.btn{ 	
+	 color: #000000;
+	 background-color: white;
+	  }
+#start{ 
+	margin-right: 8%;
+}
+#about{ 
+	margin-left: 2%; 
+}
