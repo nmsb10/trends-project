@@ -18,3 +18,6 @@ body { background-size: cover;
 #about{ 
 	margin-left: 2%; 
 }
+label{ 
+	color:#d3d3d3; 
+}

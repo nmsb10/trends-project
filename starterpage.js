@@ -1,7 +1,8 @@
-$("document").ready(function{ 
+$("document").ready(function(){ 
 	$('#start').click(function() {
-    window.location.href = '/some/new/page';
-    return false;
+    	window.location.href = 'index.html';
+    	return false;
 	});
+
 
 }); 
