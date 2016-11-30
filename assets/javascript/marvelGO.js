@@ -22,13 +22,14 @@ var config = {
 firebase.initializeApp(config);
 
 //create a variable to reference the Firebase database
-var database = firebase.database()
+var database = firebase.database();
 
 $(document).ready(function() {
 
     initMap();
 
 })
+
 
 function initMap() {
     //default map center defined as Wieboldt Hall 339 E chicago: 41.896573, -87.618767
@@ -85,18 +86,19 @@ function generateMarker(coordinates, content) {
 
     if (content != null) {
 
-        marker.title = content;
+        marker.title = content.name;
 
         var infowindow = new google.maps.InfoWindow({
             content: "<div class='container informationWindow'>" +
-                "<div class='row'>" + content + "</div>" +
+                "<div class='row'><div class='col-lg-5 infoWinTitle'><img src=" + content.details[2] + " alt=" + content.name + "height='20%' width='20%'>" + content.name + "</div>" + 
+                "<div class='col-lg-7'>" +
                 "<div class='row health'><div class='progress'>" + 
-                "<div class='progress-bar progress-bar-danger' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: 60%;'>Health 60%</div>" +
+                "<div class='progress-bar progress-bar-danger text-center' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: 60%;'>Health 60%</div>" +
                 "</div></div>" +
                 "<input onclick='battle();' type=button value='fight'>" +
                 "<div class='row shortBio'></div>" +
-                "</div>",
-
+                "</div></div>",
+                maxWidth: 400,
                 position: coordinates
         });
 
@@ -135,7 +137,7 @@ function generateCharacters() {
             });
 
 
-            generateMarker(characterCoords, response.data.results[i].name);
+            generateMarker(characterCoords, generatedCharactersArray[i]);
 
         }
 
