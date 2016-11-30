@@ -39,13 +39,11 @@
     	<div class="navbar-collapse collapse">
     		<ul class="nav navbar-nav">
     			<li class="active"><a href="#">Captured</a></li>
-    			<li><a href="#">Points</a></li>
-    			<li><a href="#">???</a></li>	
 			</ul>
 			<form class="navbar-form">
 				<div class="form-group" style="display:inline;">
 					<div class="input-group">
-						<input type="text" class="form-control" id="name" placeholder="enter a location or superhero...">
+						<input type="text" class="form-control" id="name" placeholder="Enter Username">
 							<span class="input-group-addon" id="search-button">
 								<span class="glyphicon glyphicon-search">
 								</span>
@@ -62,8 +60,7 @@
 			<input onclick="displayHealth();" type=button value="health">
 			<input onclick="deleteMarkers();" type=button value="???">
 		</div>
-		<div id="map" class="col-md-12">
-		</div>
+		<div id="map" class="col-md-12"></div>
 	</div>
 
 	<div class="row">
@@ -166,6 +163,12 @@ a{
 	background-color: white;
 	border: 1px solid lime;
 }
+
+.informationWindow{
+
+	max-width: 100%;
+	color: black;
+}
 </style>
 
 <!-- adding the google map api -->
@@ -177,4 +180,5 @@ a{
 
 </body>
 </html>
+
 

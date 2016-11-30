@@ -55,7 +55,7 @@ function initMap() {
     //default map center defined as Wieboldt Hall 339 E chicago: 41.896573, -87.618767
     map = new google.maps.Map(document.getElementById('map'), {
         center: new google.maps.LatLng(41.896573, -87.618767),
-        zoom: 15
+        zoom: 10
     });
 
     //if user accepts to allow app to take their current location
@@ -109,14 +109,23 @@ function generateMarker(coordinates, content) {
         marker.title = content;
 
         var infowindow = new google.maps.InfoWindow({
-            content: "<p class=title>" + content + "</p>",
-            position: coordinates
+            content: "<div class='container informationWindow'>" +
+                "<div class='row'>" + content + "</div>" +
+                "<div class='row health'><button type='button' class='btn btn-default'>Health</button></div>" +
+                "<div class='row energy'><button type='button' class='btn btn-default'>Energy</button></div>" +
+                "<div class='row shortBio'></div>" +
+                "</div>",
+
+                position: coordinates
         });
 
         marker.addListener('click', function() {
             infowindow.open(map, marker);
+            //setInterval(function() { infowindow.close(); }, 3000);
+        });
 
-            setInterval(function() { infowindow.close(); }, 3000);
+        infowindow.addListener('mouseout', function() {
+          infowindow.close();
         });
     }
 }
@@ -179,7 +188,6 @@ function randomCoordinates(curPosition) {
 
     return newPosition;
 }
-
 
 //use this function to make sure characters are not given coordinates
 //in eg the Lake, river, major street...
