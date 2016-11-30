@@ -9,6 +9,7 @@ var isPosition = false;
 var hash = "";
 //markers array keeps track of the characters generated
 var markers = [];
+var generatedCharactersArray = [];
 
 //initialize Firebase
 var config = {
@@ -26,28 +27,6 @@ var database = firebase.database()
 $(document).ready(function() {
 
     initMap();
-
-    /*    $("#search-button").on("click", function() {
-            //explain here why you need to use the replace function
-            //is this only for 20 results?
-            characterName = $("#name").val().trim().replace(" ", "%20");
-            //see generateCharacters function for source of currentTime and hash variables
-            currentTime = Date.now();
-
-            queryURL = baseURL + "characters?name=" + characterName + currentTime + key + hash;
-
-            console.log(queryURL);
-
-            $.ajax({ url: queryURL, method: 'GET' }).done(function(response) {
-
-                console.log(response.data.results[0].description);
-
-            });
-
-            return false;
-        })
-
-    */
 
 })
 
@@ -111,8 +90,10 @@ function generateMarker(coordinates, content) {
         var infowindow = new google.maps.InfoWindow({
             content: "<div class='container informationWindow'>" +
                 "<div class='row'>" + content + "</div>" +
-                "<div class='row health'><button type='button' class='btn btn-default'>Health</button></div>" +
-                "<div class='row energy'><button type='button' class='btn btn-default'>Energy</button></div>" +
+                "<div class='row health'><div class='progress'>" + 
+                "<div class='progress-bar progress-bar-danger' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: 60%;'>Health 60%</div>" +
+                "</div></div>" +
+                "<input onclick='battle();' type=button value='fight'>" +
                 "<div class='row shortBio'></div>" +
                 "</div>",
 
@@ -142,10 +123,23 @@ function generateCharacters() {
 
         for (var i = 0; i < response.data.results.length; i++) {
 
-            generateMarker(randomCoordinates(currentPosition), response.data.results[i].name);
+            var characterCoords = randomCoordinates(currentPosition);
+            
+            generatedCharactersArray.push({
+                name: response.data.results[i].name,
+                details: [ 
+                characterCoords, 
+                response.data.results[i].description,
+                response.data.results[i].thumbnail.path + "." + response.data.results[i].thumbnail.extension
+                ]
+            });
+
+
+            generateMarker(characterCoords, response.data.results[i].name);
 
         }
 
+            console.log(generatedCharactersArray);
     })
 
 }
