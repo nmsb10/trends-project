@@ -40,28 +40,29 @@ $("#search-button").on("click", function(){
     initializeMap();
     //1.5 initializeMap also creates a map marker for the playerLocation
     //2 generate heros (using playerLocation):
-    generateHeros();
-    //3 setactiveheros function pushes the characters in generatedCharactersArray to activeHeros in firebase 
-    //setActiveHeros();
+    //NOW BEING CALLED WITHIN THE INITIALIZEMAP FUNCTION...
+    //generateHeros();
+    //3 pushnewheros function pushes the characters in generatedCharactersArray to activeHeros in firebase 
+    //pushNewHeros();
     var userInfo =
     {
       playerName: playerName,
       playerHealth: 100,
-      activeHeros: {
-        heroName: '',
-        location: {
-          lat: '',
-          lng: ''
-        },
-        heroDescription: '',
-        photo: '',
-        health:0,
-        //attackPower = decrease of userHealth if hero attacks
-        attackPower:0,
-        //attackPercentage = likelihood hero will attack if user attacks them
-        attackPercentage:0
-      },
-      capturedHeros: {}
+      // activeHeros: {
+      //   heroName: '',
+      //   location: {
+      //     lat: '',
+      //     lng: ''
+      //   },
+      //   heroDescription: '',
+      //   photo: '',
+      //   health:0,
+      //   //attackPower = decrease of userHealth if hero attacks
+      //   attackPower:0,
+      //   //attackPercentage = likelihood hero will attack if user attacks them
+      //   attackPercentage:0
+      // },
+      // capturedHeros: {}
     };
     //4 enable battle
     //within battle function, if active hero health = 0, hero is removed from
@@ -79,7 +80,7 @@ function initializeMap(){
   //default map center defined as Wieboldt Hall 339 E chicago: 41.896573, -87.618767
   map = new google.maps.Map(document.getElementById('map'), {
     center: new google.maps.LatLng(41.896573, -87.618767),
-      zoom: 13
+      zoom: 15
   });
   //if user accepts to allow app to take their current location
   if (navigator.geolocation) {
@@ -90,7 +91,7 @@ function initializeMap(){
       };
       generateMarker(playerLocation);
       map.setCenter(playerLocation);
-      //currentPosition2 = playerLocation;
+      //should generateHeros (which generates new heros) and pushNewHeros ONLY if user is not already in firebase. but we'll focus on that later
       generateHeros();
     }, function() {
       handleLocationError(true, infoWindow, map.getCenter());
@@ -142,7 +143,7 @@ function generateHeros() {
   $.ajax({ url: queryURL, method: 'GET' }).done(function(response) {
     for (var i = 0; i < response.data.results.length; i++) {
       var characterCoords = generateRandomCoordinates(playerLocation);
-      console.log(characterCoords);
+      //console.log(characterCoords);
       var attackPower = generateAttackValue();
       var attackPercentage = generateAttackPercentage();
       //use the same function just because it's out of 100
@@ -162,6 +163,7 @@ function generateHeros() {
       //database.ref('users').child(playerName).child('activeHeros').push(heroObject);
     }
     console.log(generatedCharactersArray);
+    pushNewHeros();
   });
 }
 
@@ -193,6 +195,22 @@ function generateAttackValue(){
 function generateAttackPercentage(){
     var attackPercentage = Math.ceil(Math.random() * 100);
     return attackPercentage;
+}
+
+function pushNewHeros(){
+    for(var i = 0; i<generatedCharactersArray.length; i++){
+        var firebaseActiveHero = {
+            heroName: generatedCharactersArray[i].heroName,
+            location: generatedCharactersArray[i].location,
+            heroDescription: generatedCharactersArray[i].heroDescription,
+            photo: generatedCharactersArray[i].photo,
+            health: generatedCharactersArray[i].health,
+            attackPower: generatedCharactersArray[i].attackPower,
+            attackPercentage: generatedCharactersArray[i].attackPercentage
+        };
+        //push each character's info to the user's activeHeros object in firebase
+        database.ref('users').child(playerName).child('activeHeros').child(generatedCharactersArray[i].heroName).push(firebaseActiveHero);
+    }
 }
 
 //database will update each time user does something
@@ -274,7 +292,7 @@ function generateMarker(coordinates, content) {
     //push the new marker to the markers array
     /*  markers.push(marker);*/
 
-    if (content != null) {
+    if (content !==null) {
 
         marker.title = content.name;
 
@@ -332,7 +350,7 @@ function generateCharacters() {
         }
 
             console.log(generatedCharactersArray);
-    })
+    });
 
 }
 
@@ -368,8 +386,8 @@ function randomCoordinates(curPosition) {
     }
 
     var newPosition = {
-        lat: curPosition.lat + Math.random() * .2 * posNegOne,
-        lng: curPosition.lng + Math.random() * .2 * posNegTwo
+        lat: curPosition.lat + Math.random() * 0.2 * posNegOne,
+        lng: curPosition.lng + Math.random() * 0.2 * posNegTwo
     };
 
     return newPosition;
