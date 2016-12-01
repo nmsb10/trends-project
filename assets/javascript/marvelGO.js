@@ -16,6 +16,7 @@ var playerName = '';
 var playerExists = false;
 var map = null;
 var playerLocation = {};
+var currentPosition2 = null;
 //required for marvel api call:
 var privateKey = "accae6d1b3da682be3974ffddf1adf741480562d";
 var key = "82df9267e06ec89e40b14eec91deacb4";
@@ -89,13 +90,15 @@ function initializeMap(){
       };
       generateMarker(playerLocation);
       map.setCenter(playerLocation);
+      //currentPosition2 = playerLocation;
+      generateHeros();
     }, function() {
       handleLocationError(true, infoWindow, map.getCenter());
     });
   }
 }
 
-function generateMapMarker(coordinates, content) {
+function generateMapMarker(coordinates, material) {
   //the google maps marker requires at least position and map.
   var marker = new google.maps.Marker({
     position: coordinates,
@@ -103,16 +106,17 @@ function generateMapMarker(coordinates, content) {
     //added the drop animation when each marker is created
     animation: google.maps.Animation.DROP
   });
-  //would if(content){ work as well?
-  if(content !== null) {
-    marker.title = content;
+  //would if(material){ work as well?
+  if(material !== null) {
+    marker.title = material.heroName;
+    var attackPower = material.attackPower;
     //populate the marker's info window if content is provided in the function call
     var infowindow = new google.maps.InfoWindow({
       content: "<div class='container informationWindow'>" +
-        "<div class='row'><div class='col-lg-5 infoWinTitle'><img src=" + content.photo + " alt=" + content.name + "height='20%' width='20%'>" + content.name + "</div>" + 
+        "<div class='row'><div class='col-lg-5 infoWinTitle'><img src=" + material.photo + " alt=" + material.heroName + "height='20%' width='20%'>" + material.heroName + "</div>" + 
         "<div class='col-lg-7'>" +
         "<div class='row health'><div class='progress'>" + 
-        "<div class='progress-bar progress-bar-danger text-center' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: 60%;'>Health 60%</div>" +
+        "<div class='progress-bar progress-bar-danger text-center' role='progressbar' aria-valuenow='" + material.health + "' aria-valuemin='0' aria-valuemax='100' style='width: " + material.health + "%;'>Health " + material.health + "%</div>" +
         "</div></div>" +
         "<input onclick='battle();' type=button value='fight'>" +
         "<div class='row shortBio'></div>" +
@@ -131,25 +135,29 @@ function generateMapMarker(coordinates, content) {
 }
 
 function generateHeros() {
+    //console.log(playerLocation);
   var currentTime = Date.now();
   var hash = "&hash=" + md5(currentTime + privateKey + key);
   queryURL = baseURL + "characters?modifiedSince=1/1/1900&ts=" + currentTime + "&apikey=" + key + hash;
   $.ajax({ url: queryURL, method: 'GET' }).done(function(response) {
     for (var i = 0; i < response.data.results.length; i++) {
       var characterCoords = generateRandomCoordinates(playerLocation);
+      console.log(characterCoords);
       var attackPower = generateAttackValue();
       var attackPercentage = generateAttackPercentage();
+      //use the same function just because it's out of 100
+      var health = generateAttackPercentage();
       var heroObject = {
         heroName: response.data.results[i].name,
         location: characterCoords, 
         heroDescription: response.data.results[i].description,
         photo: response.data.results[i].thumbnail.path + "." + response.data.results[i].thumbnail.extension,
-        health:0,
+        health:health,
         attackPower:attackPower,
         attackPercentage: attackPercentage
       };
-      generatedCharactersArray.push(heroObject);
-      generateMapMarker(characterCoords, generatedCharactersArray[i]);
+      generateMapMarker(characterCoords, heroObject);
+      generatedCharactersArray.push(heroObject);      
       //push each character's info to the user's activeHeros object in firebase
       //database.ref('users').child(playerName).child('activeHeros').push(heroObject);
     }
