@@ -4,17 +4,15 @@ var currentPosition = null;
 var isPosition = false;
 var map = null;
 var playerLocation = {};
+var currentPosition2 = null;
 //required for marvel api call:
 var privateKey = "accae6d1b3da682be3974ffddf1adf741480562d";
 var key = "82df9267e06ec89e40b14eec91deacb4";
 var baseURL = "https://gateway.marvel.com:443/v1/public/";
 //array to store all generated characters (removed markers array)
 var generatedCharactersArray = [];
+var playerExists = null;
 var hash = "";
-
-//global variables:
-var playerName = '';
-var playerExists = false;
 
 $(document).ready(function() {
     //button for adding user
@@ -67,6 +65,7 @@ $(document).ready(function() {
     });
 })
 
+
 function initializeMap() {
     //default map center defined as Wieboldt Hall 339 E chicago: 41.896573, -87.618767
     map = new google.maps.Map(document.getElementById('map'), {
@@ -89,7 +88,7 @@ function initializeMap() {
     }
 }
 
-function generateMapMarker(coordinates, content) {
+function generateMapMarker(coordinates, material) {
     //the google maps marker requires at least position and map.
     var marker = new google.maps.Marker({
         position: coordinates,
@@ -97,16 +96,17 @@ function generateMapMarker(coordinates, content) {
         //added the drop animation when each marker is created
         animation: google.maps.Animation.DROP
     });
-    //would if(content){ work as well?
-    if (content != null) {
-        marker.title = content;
+    //would if(material){ work as well?
+    if (material != null) {
+        marker.title = material.heroName;
+        var attackPower = material.attackPower;
         //populate the marker's info window if content is provided in the function call
         var infowindow = new google.maps.InfoWindow({
             content: "<div class='container informationWindow'>" +
-                "<div class='row'><div class='col-lg-5 infoWinTitle'><img src=" + content.photo + " alt=" + content.heroName + "height='20%' width='20%'>" + content.heroName + "</div>" +
+                "<div class='row'><div class='col-lg-5 infoWinTitle'><img src=" + material.photo + " alt=" + material.heroName + "height='20%' width='20%'>" + material.heroName + "</div>" +
                 "<div class='col-lg-7'>" +
                 "<div class='row health'><div class='progress'>" +
-                "<div class='progress-bar progress-bar-danger text-center' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: 60%;'>Health 60%</div>" +
+                "<div class='progress-bar progress-bar-danger text-center' role='progressbar' aria-valuenow='" + material.health + "' aria-valuemin='0' aria-valuemax='100' style='width: " + material.health + "%;'>Health " + material.health + "%</div>" +
                 "</div></div>" +
                 "<input onclick='battle();' type=button value='fight'>" +
                 "<div class='row shortBio'></div>" +
@@ -133,12 +133,13 @@ function generateHeros(letter) {
             var characterCoords = generateRandomCoordinates(playerLocation);
             var attackPower = generateAttackValue();
             var attackPercentage = generateAttackPercentage();
+            var health = generateAttackPercentage();
             var heroObject = {
                 heroName: response.data.results[i].name,
                 location: characterCoords,
                 heroDescription: response.data.results[i].description,
                 photo: response.data.results[i].thumbnail.path + "." + response.data.results[i].thumbnail.extension,
-                health: 0,
+                health: health,
                 attackPower: attackPower,
                 attackPercentage: attackPercentage
             };
@@ -178,3 +179,13 @@ function generateAttackPercentage() {
     var attackPercentage = Math.ceil(Math.random() * 100);
     return attackPercentage;
 }
+
+//database will update each time user does something
+// database.ref('users').on('value', function(snapshot){
+//   if(snapshot.child(playerName).exists()){
+//     playerExists = true;
+//     //upload the user's everything from firebase
+//   }else{
+//   }
+
+// });
