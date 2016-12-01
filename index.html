@@ -40,11 +40,15 @@
         </div>
         <div class="row" id="map-row">
             <div id="floating-panel">
+                <input onclick="battle();" type=button value="fight">
+                <input onclick="displayHealth();" type=button value="health">
+                <input onclick="deleteMarkers();" type=button value="???">
             </div>
-            <div id="map" class="col-lg-12 center"></div>
+            <div id="map" class="col-md-12">
+            </div>
         </div>
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h2 class="panel-title">choose options</h2>
@@ -80,6 +84,11 @@
             </div>
             <!-- /.col-lg-6 -->
         </div>
+        <!-- remove this test form once testing is completed! -->
+        <form>
+            <input type="text" id="name-input" placeholder="what is your name?">
+            <input id="check-user" type="submit" value="Start">
+        </form>
         <footer class="footer">
             Copyright &copy; 2016 CC AM JN. All Rights Reserved.
         </footer>
