@@ -45,13 +45,22 @@ $("#check-user").on("click", function(){
     //1.5 initializeMap also creates a map marker for the playerLocation
     //2 generate heros (using playerLocation):
     generateHeros();
-
+    //setactiveheros function pushes the characters in generatedCharactersArray to activeHeros in firebase 
+    //setActiveHeros();
     var userInfo =
     {
       playerName: playerName,
-
-
-
+      playerHealth: 100,
+      activeHeros: {
+        heroName: '',
+        location: {
+          lat: '',
+          lng: ''
+        },
+        heroDescription: '',
+        photo: ''
+      },
+      capturedHeros: {}
     };
     //  {
     //   //set an object, with playerName: object
@@ -150,7 +159,7 @@ function generateMapMarker(coordinates, content) {
     //populate the marker's info window if content is provided in the function call
     var infowindow = new google.maps.InfoWindow({
       content: "<div class='container informationWindow'>" +
-        "<div class='row'><div class='col-lg-5 infoWinTitle'><img src=" + content.details[2] + " alt=" + content.name + "height='20%' width='20%'>" + content.name + "</div>" + 
+        "<div class='row'><div class='col-lg-5 infoWinTitle'><img src=" + content.photo + " alt=" + content.name + "height='20%' width='20%'>" + content.name + "</div>" + 
         "<div class='col-lg-7'>" +
         "<div class='row health'><div class='progress'>" + 
         "<div class='progress-bar progress-bar-danger text-center' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: 60%;'>Health 60%</div>" +
@@ -175,15 +184,16 @@ function generateHeros() {
   $.ajax({ url: queryURL, method: 'GET' }).done(function(response) {
     for (var i = 0; i < response.data.results.length; i++) {
       var characterCoords = generateRandomCoordinates(playerLocation);
-      generatedCharactersArray.push({
-        name: response.data.results[i].name,
-        details: [ 
-        characterCoords, 
-        response.data.results[i].description,
-        response.data.results[i].thumbnail.path + "." + response.data.results[i].thumbnail.extension
-        ]
-      });
+      var heroObject = {
+        heroName: response.data.results[i].name,
+        location: characterCoords, 
+        heroDescription: response.data.results[i].description,
+        photo: response.data.results[i].thumbnail.path + "." + response.data.results[i].thumbnail.extension
+      };
+      generatedCharactersArray.push(heroObject);
       generateMapMarker(characterCoords, generatedCharactersArray[i]);
+      //push each character's info to the user's activeHeros object in firebase
+      database.ref('users').child(playerName).child('activeHeros').push(heroObject);
     }
     console.log(generatedCharactersArray);
   });
