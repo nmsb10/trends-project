@@ -39,40 +39,21 @@
             </div>
         </div>
         <div class="row" id="map-row">
-            <div id="floating-panel">
+            <div id="map" class="col-md-12">
             </div>
-            <div id="map" class="col-lg-12 center"></div>
         </div>
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h2 class="panel-title">choose options</h2>
+                        <h2 class="panel-title">Character Information</h2>
                     </div>
                     <div class="panel-body">
-                        <div class="btn-group btn-group-justified" role="group" aria-label="...">
-                            <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-default">Captured</button>
-                            </div>
-                            <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-default">Points</button>
-                            </div>
-                            <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-default">???</button>
-                            </div>
-                            <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-default"> Right</button>
-                            </div>
-                            <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Dropdown link</a></li>
-                                    <li><a href="#">Dropdown link</a></li>
-                                </ul>
-                            </div>
-                        </div>
+					<div class=progress>
+           				<div class='progress-bar progress-bar-danger text-center' role='progressbar' aria-valuenow=100 aria-valuemin='0' aria-valuemax='100' style='width:100%;'> 100%
+           				</div> 
+                	</div>
+                    </div>
                     </div>
                     <!-- panel-body -->
                 </div>
@@ -80,6 +61,11 @@
             </div>
             <!-- /.col-lg-6 -->
         </div>
+        <!-- remove this test form once testing is completed! -->
+        <form>
+            <input type="text" id="name-input" placeholder="what is your name?">
+            <input id="check-user" type="submit" value="Start">
+        </form>
         <footer class="footer">
             Copyright &copy; 2016 CC AM JN. All Rights Reserved.
         </footer>
