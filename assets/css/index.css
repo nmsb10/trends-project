@@ -1,0 +1,68 @@
+ .navbar-grey {
+        background-color: rgb(100, 100, 100);
+        color: rgb(255, 255, 255);
+    }
+    
+    a {
+        color: rgb(255, 255, 255);
+    }
+    
+    #search-button:hover {
+        background-color: lime;
+    }
+    
+    #map {
+        width: 80%;
+        height: 400px;
+        /*background:black;*/
+        padding: 0px;
+        margin: 0 auto;
+        color: white;
+        text-align: center;
+        border-radius: 3px;
+        border: 2px solid rgb(100, 100, 100);
+    }
+    
+    #map-row {
+        margin: 50px auto;
+    }
+    
+    .title {
+        color: black;
+        background-color: red;
+    }
+    
+    #floating-panel {
+        position: absolute;
+        top: 75px;
+        left: 25%;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Roboto', 'sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+    }
+    
+    .battle-div {
+        position: absolute;
+        bottom: 0px;
+        width: 50%;
+        height: 125px;
+        z-index: 4;
+        background-color: white;
+        border: 1px solid lime;
+    }
+    
+    .informationWindow {
+        max-width: 100%;
+        color: black;
+    }
+    
+    .infoWinTitle {
+        font-family: 'Bungee Inline', cursive;
+    }
+
+    
