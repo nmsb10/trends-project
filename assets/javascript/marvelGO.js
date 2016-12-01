@@ -63,6 +63,13 @@ $(document).ready(function() {
         }
         return false;
     });
+
+
+    $("#capturedHeros").on("click", function(){
+
+        $("#displayCapturedHeros").html("");
+
+    })    
 })
 
 

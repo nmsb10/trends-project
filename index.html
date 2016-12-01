@@ -23,14 +23,14 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Captured</a></li>
+                    <li class="active" id=capturedHeros><a href="#">Captured</a></li>
                 </ul>
                 <form class="navbar-form">
                     <div class="form-group" style="display:inline;">
                         <div class="input-group">
-                            <input type="text" class="form-control" id="name-input" placeholder="Enter Username">
+                            <input type="text" class="form-control" id="name-input" placeholder="Enter Username and GO!">
                             <span class="input-group-addon" id="search-button">
-                                <span class="glyphicon glyphicon-search">
+                                <span class="glyphicon glyphicon-screenshot">
                                 </span>
                             </span>
                         </div>
@@ -43,32 +43,28 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h2 class="panel-title">Character Information</h2>
                     </div>
                     <div class="panel-body">
-					<div class=progress>
-           				<div class='progress-bar progress-bar-danger text-center' role='progressbar' aria-valuenow=100 aria-valuemin='0' aria-valuemax='100' style='width:100%;'> 100%
-           				</div> 
-                	</div>
+                        <div class=progress>
+                            <div class='progress-bar progress-bar-danger text-center' role='progressbar' aria-valuenow=100 aria-valuemin='0' aria-valuemax='100' style='width:100%;'> 100%
+                            </div>
+                        </div>
                     </div>
-                    </div>
-                    <!-- panel-body -->
                 </div>
-                <!-- panel -->
             </div>
-            <!-- /.col-lg-6 -->
         </div>
-        <!-- remove this test form once testing is completed! -->
-        <form>
-            <input type="text" id="name-input" placeholder="what is your name?">
-            <input id="check-user" type="submit" value="Start">
-        </form>
-        <footer class="footer">
-            Copyright &copy; 2016 CC AM JN. All Rights Reserved.
-        </footer>
+		<div class="row">
+			<div class=col-lg-12 id=displayCapturedHeros></div>
+		</div>
+    </div>
+    <!-- remove this test form once testing is completed! -->
+    <footer class="footer">
+        Copyright &copy; 2016 CC AM JN. All Rights Reserved.
+    </footer>
     </div>
 </body>
 
