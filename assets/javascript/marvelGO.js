@@ -32,80 +32,72 @@ var playerExists = false;
 
 $(document).ready(function() {
 
-initializeMap();
-//1.5 initializeMap also creates a map marker for the playerLocation
-//2 generate heros (using playerLocation):
-generateHeros();
+    initializeMap();
+    //1.5 initializeMap also creates a map marker for the playerLocation
+    //2 generate heros (using playerLocation):
+    generateHeros();
 
-var userInfo = {
-  //set an object, with playerName: object
-  playerName: playerName,
-  details: {
-    userHealth: 100,
-    //heros are objects
-    activeHeros:
-    {
-      //each hero is an object
-      heroName:
-      {
-        health:0,
-        //attackPower = decrease of userHealth if hero attacks
-        attackPower:0,
-        //attackPercentage = likelihood hero will attack if user attacks them
-        attackPercentage:0,
-        //coordinates is another object
-        coordinates:
-        {
-          lat:0,
-          long:0
+    var userInfo = {
+        //set an object, with playerName: object
+        playerName: playerName,
+        details: {
+            userHealth: 100,
+            //heros are objects
+            activeHeros: {
+                //each hero is an object
+                heroName: {
+                    health: 0,
+                    //attackPower = decrease of userHealth if hero attacks
+                    attackPower: 0,
+                    //attackPercentage = likelihood hero will attack if user attacks them
+                    attackPercentage: 0,
+                    //coordinates is another object
+                    coordinates: {
+                        lat: 0,
+                        long: 0
+                    }
+                }
+            },
+            capturedHeros: {
+                //each captured hero is an object
+                heroName: {
+                    health: 0,
+                    //attackPower = decrease of userHealth if hero attacks
+                    attackPower: 0,
+                    //attackPercentage = likelihood hero will attack if user attacks them
+                    attackPercentage: 0,
+                    //coordinates is another object
+                    coordinates: {
+                        lat: 0,
+                        long: 0
+                    }
+                }
+            }
         }
-      }
-    },
-    capturedHeros:
-    {
-      //each captured hero is an object
-      heroName:
-      {
-        health:0,
-        //attackPower = decrease of userHealth if hero attacks
-        attackPower:0,
-        //attackPercentage = likelihood hero will attack if user attacks them
-        attackPercentage:0,
-        //coordinates is another object
-        coordinates:
-        {
-          lat:0,
-          long:0
-        }
-      }
+        // }//end of setting the database
+        //3 populate map
+        //4 enable battle
+        //5 update heros after user battles
+        //6 update scores
+        //IF USER ALREADY EXISTS, DON'T SET. JUST UPLOAD THAT USER'S SETTINGS FROM FIREBASE
+        database.ref('users').child(playerName).set(userInfo);
+
+        //add characters to character array
+        //set all characters in firebase in child users > playerName > activeHeros
+        //enable battle function
+        //within battle function, if active hero health = 0, hero is removed from
+        //activeHeros and all information is set to capturedHeros
+        //don't forget, the markers for capturedHeros could be a different color (eg green?)
     }
-  }
-// }//end of setting the database
-//3 populate map
-//4 enable battle
-//5 update heros after user battles
-//6 update scores
-//IF USER ALREADY EXISTS, DON'T SET. JUST UPLOAD THAT USER'S SETTINGS FROM FIREBASE
-database.ref('users').child(playerName).set(userInfo);
-
-//add characters to character array
-//set all characters in firebase in child users > playerName > activeHeros
-//enable battle function
-//within battle function, if active hero health = 0, hero is removed from
-//activeHeros and all information is set to capturedHeros
-//don't forget, the markers for capturedHeros could be a different color (eg green?)
-}
-return false;
+    return false;
 
 
-/*        //database will update each time user does something
-        database.ref('users').on('value', function(snapshot) {
-            if (snapshot.child(playerName).exists()) {
-                playerExists = true;
-                //upload the user's everything from firebase
-            } else {}*/
-
-})
+    /*        //database will update each time user does something
+            database.ref('users').on('value', function(snapshot) {
+                if (snapshot.child(playerName).exists()) {
+                    playerExists = true;
+                    //upload the user's everything from firebase
+                } else {}*/
 
 })
 
