@@ -1,7 +1,5 @@
-var characterName = '';
 var marker = null;
 var currentPosition = null;
-var isPosition = false;
 
 //initialize Firebase
 var config = {
