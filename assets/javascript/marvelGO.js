@@ -32,107 +32,83 @@ var playerExists = false;
 
 $(document).ready(function() {
 
-    initMap();
+initializeMap();
+//1.5 initializeMap also creates a map marker for the playerLocation
+//2 generate heros (using playerLocation):
+generateHeros();
 
-    //button for adding user
-    //replace check-user and player-input with actual starterpage IDs once testing complete
-    $("#check-user").on("click", function() {
-        //if user forgot to add a name, should respond with something besides dinky alert
-        if ($("#player-input").val() === "") {
-            alert("please type your name.");
-            return false;
-        } else {
-            playerName = $("#name-input").val().trim();
+var userInfo = {
+  //set an object, with playerName: object
+  playerName: playerName,
+  details: {
+    userHealth: 100,
+    //heros are objects
+    activeHeros:
+    {
+      //each hero is an object
+      heroName:
+      {
+        health:0,
+        //attackPower = decrease of userHealth if hero attacks
+        attackPower:0,
+        //attackPercentage = likelihood hero will attack if user attacks them
+        attackPercentage:0,
+        //coordinates is another object
+        coordinates:
+        {
+          lat:0,
+          long:0
         }
-        if (playerExists) {
-            //run functions for existing user play
-        } else {
-            //1 initializeMap using user's current location:
-            initializeMap();
-            //1.5 initializeMap also creates a map marker for the playerLocation
-            //2 generate heros (using playerLocation):
-            generateHeros();
-
-            var userInfo = {
-                playerName: playerName,
-
-
-
-            };
-            //  {
-            //   //set an object, with playerName: object
-            //   playerName: playerName,
-            //   details:
-            //   {
-            //     userHealth: 100,
-            //     //heros are objects
-            //     activeHeros:
-            //     {
-            //       //each hero is an object
-            //       heroName:
-            //       {
-            //         health:0,
-            //         //attackPower = decrease of userHealth if hero attacks
-            //         attackPower:0,
-            //         //attackPercentage = likelihood hero will attack if user attacks them
-            //         attackPercentage:0,
-            //         //coordinates is another object
-            //         coordinates:
-            //         {
-            //           lat:0,
-            //           long:0
-            //         }
-            //       }
-            //     },
-            //     capturedHeros:
-            //     {
-            //       //each captured hero is an object
-            //       heroName:
-            //       {
-            //         health:0,
-            //         //attackPower = decrease of userHealth if hero attacks
-            //         attackPower:0,
-            //         //attackPercentage = likelihood hero will attack if user attacks them
-            //         attackPercentage:0,
-            //         //coordinates is another object
-            //         coordinates:
-            //         {
-            //           lat:0,
-            //           long:0
-            //         }
-            //       }
-            //     }
-            //   }
-            // }//end of setting the database
-            //3 populate map
-            //4 enable battle
-            //5 update heros after user battles
-            //6 update scores
-            //IF USER ALREADY EXISTS, DON'T SET. JUST UPLOAD THAT USER'S SETTINGS FROM FIREBASE
-            database.ref('users').child(playerName).set(userInfo);
-
-            //add characters to character array
-            //set all characters in firebase in child users > playerName > activeHeros
-            //enable battle function
-            //within battle function, if active hero health = 0, hero is removed from
-            //activeHeros and all information is set to capturedHeros
-            //don't forget, the markers for capturedHeros could be a different color (eg green?)
+      }
+    },
+    capturedHeros:
+    {
+      //each captured hero is an object
+      heroName:
+      {
+        health:0,
+        //attackPower = decrease of userHealth if hero attacks
+        attackPower:0,
+        //attackPercentage = likelihood hero will attack if user attacks them
+        attackPercentage:0,
+        //coordinates is another object
+        coordinates:
+        {
+          lat:0,
+          long:0
         }
-        return false;
+      }
+    }
+  }
+// }//end of setting the database
+//3 populate map
+//4 enable battle
+//5 update heros after user battles
+//6 update scores
+//IF USER ALREADY EXISTS, DON'T SET. JUST UPLOAD THAT USER'S SETTINGS FROM FIREBASE
+database.ref('users').child(playerName).set(userInfo);
+
+//add characters to character array
+//set all characters in firebase in child users > playerName > activeHeros
+//enable battle function
+//within battle function, if active hero health = 0, hero is removed from
+//activeHeros and all information is set to capturedHeros
+//don't forget, the markers for capturedHeros could be a different color (eg green?)
+}
+return false;
 
 
-        //database will update each time user does something
+/*        //database will update each time user does something
         database.ref('users').on('value', function(snapshot) {
             if (snapshot.child(playerName).exists()) {
                 playerExists = true;
                 //upload the user's everything from firebase
-            } else {}
+            } else {}*/
 
-        });
+})
 
-    })
+})
 
-});
 
 function initializeMap() {
     //default map center defined as Wieboldt Hall 339 E chicago: 41.896573, -87.618767
@@ -147,7 +123,7 @@ function initializeMap() {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
             };
-            generateMarker(playerLocation);
+            generateMapMarker(playerLocation);
             map.setCenter(playerLocation);
         }, function() {
             handleLocationError(true, infoWindow, map.getCenter());
@@ -164,7 +140,7 @@ function generateMapMarker(coordinates, content) {
         animation: google.maps.Animation.DROP
     });
     //would if(content){ work as well?
-    if (content !== null) {
+    if (content != null) {
         marker.title = content;
         //populate the marker's info window if content is provided in the function call
         var infowindow = new google.maps.InfoWindow({
@@ -189,11 +165,16 @@ function generateMapMarker(coordinates, content) {
 
 function generateHeros() {
     var currentTime = Date.now();
+
     var hash = "&hash=" + md5(currentTime + privateKey + key);
+
     queryURL = baseURL + "characters?modifiedSince=1/1/1900&ts=" + currentTime + "&apikey=" + key + hash;
+
     $.ajax({ url: queryURL, method: 'GET' }).done(function(response) {
         for (var i = 0; i < response.data.results.length; i++) {
+
             var characterCoords = generateRandomCoordinates(playerLocation);
+
             generatedCharactersArray.push({
                 name: response.data.results[i].name,
                 details: [
@@ -202,9 +183,13 @@ function generateHeros() {
                     response.data.results[i].thumbnail.path + "." + response.data.results[i].thumbnail.extension
                 ]
             });
+
             generateMapMarker(characterCoords, generatedCharactersArray[i]);
+
         }
+
         console.log(generatedCharactersArray);
+
     });
 }
 
