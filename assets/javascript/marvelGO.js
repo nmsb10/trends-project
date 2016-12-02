@@ -124,7 +124,9 @@ function generateMapMarker(coordinates, material) {
                 "<div class='row'><div class='col-lg-5 infoWinTitle'><img src=" + material.photo + " alt=" + material.heroName + "height='20%' width='20%'>" + material.heroName + "</div>" + 
                 "<div class='col-lg-7'>" +
                 "<div class='row health'><div class='progress'>" + 
-                "<div class='progress-bar progress-bar-danger text-center' role='progressbar' aria-valuenow='" + material.health + "' aria-valuemin='0' aria-valuemax='100' style='width: " + material.health + "%;'>Health " + material.health + "%</div>" +
+                "<div class='progress-bar progress-bar-success text-center' role='progressbar' aria-valuenow='" + material.health + "' aria-valuemin='0' aria-valuemax='100' style='width: " + material.health + "%;'>Health " + material.health + "%</div>" +
+                "</div><div class='progress'>" + 
+                "<div class='progress-bar progress-bar-danger text-center' role='progressbar' aria-valuenow='" + material.attackPower + "' aria-valuemin='0' aria-valuemax='100' style='width: " + material.attackPower + "%;'>Attack " + material.attackPower + "%</div>" +
                 "</div></div>" +
                 "<button onclick='fightOnClick()' class='fight-button' id='"+ material.heroName + "'>fight</button>" +
                 "<div class='row shortBio'></div>" +
