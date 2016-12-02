@@ -29,8 +29,6 @@ $(document).ready(function() {
         if ($("#name-input").val() === "") {
             alert("please type your name.");
             //update the player's username in the DOM
-    var replaceText = '<li class="active" id="userNameHere"><a href="#">' + playerName + '</a></li>';
-    $('#userNameHere').replaceWith(replaceText);
             return false;
         } else {
             playerName = $("#name-input").val().trim();
@@ -155,13 +153,13 @@ function generateHeros(letter) {
             var characterCoords = generateRandomCoordinates(playerLocation);
             var attackPower = generateAttackValue();
             var attackPercentage = generateAttackPercentage();
-            var health = generateAttackPercentage();
+            //var health = generateAttackPercentage();
             var heroObject = {
                 heroName: response.data.results[i].name,
                 location: characterCoords,
                 heroDescription: response.data.results[i].description,
                 photo: response.data.results[i].thumbnail.path + "." + response.data.results[i].thumbnail.extension,
-                health: health,
+                health: 100,
                 attackPower: attackPower,
                 attackPercentage: attackPercentage
             };
